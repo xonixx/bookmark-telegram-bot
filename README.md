@@ -21,7 +21,7 @@ Optionally can have a means to tag links and then select by tag but need to find
 |         |                 |
 ----------|------------------
 **User**  |`/random`
-**Bot**   | https://some.link <BR> `/makr_read_123` `/random` 
+**Bot**   | https://some.link <BR> `/mark_read_123` `/random` 
           
 ### Mark read
 |         |                 |
