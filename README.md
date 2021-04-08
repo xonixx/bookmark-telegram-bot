@@ -15,7 +15,7 @@ Optionally can have a means to tag links and then select by tag but need to find
 |         |                 |
 ----------|------------------
 **User**  |https://some.link/
-**Bot**   | Ok, saved link. Links in backlog: 17
+**Bot**   | Ok, saved link. Links in backlog: 17 `/random`
           
 ### Get random link
 |         |                 |
