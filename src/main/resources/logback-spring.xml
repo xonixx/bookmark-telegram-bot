@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+    <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+    </root>
+
+    <springProfile name="prod, test">
+        <springProperty scope="local" name="elkHost" source="elk.host"/>
+        <springProperty scope="local" name="elkPort" source="elk.port"/>
+        <springProperty scope="context" name="application" source="elk.application"/>
+
+        <appender name="elk" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+            <destination>${elkHost}:${elkPort}</destination>
+            <ssl/>
+            <keepAliveDuration>5 minutes</keepAliveDuration>
+            <reconnectionDelay>5 seconds</reconnectionDelay>
+
+            <!-- encoder is required -->
+            <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+                <fieldNames>
+                    <level>priority</level>
+                </fieldNames>
+            </encoder>
+        </appender>
+
+        <!--<root level="DEBUG">-->
+        <root>
+            <appender-ref ref="elk"/>
+        </root>
+    </springProfile>
+</configuration>
