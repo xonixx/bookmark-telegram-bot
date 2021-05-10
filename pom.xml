@@ -68,17 +68,18 @@
 		<dependency>
 			<groupId>com.github.pengrad</groupId>
 			<artifactId>java-telegram-bot-api</artifactId>
-			<version>4.8.0</version>
+			<version>5.1.0</version>
 		</dependency>
 		<dependency>
 			<groupId>net.logstash.logback</groupId>
 			<artifactId>logstash-logback-encoder</artifactId>
-			<version>6.3</version>
+			<version>6.6</version>
 		</dependency>
 
 	</dependencies>
 
 	<build>
+		<finalName>bookmark_telegram_bot</finalName>
 		<sourceDirectory>${project.basedir}/src/main/kotlin</sourceDirectory>
 		<testSourceDirectory>${project.basedir}/src/test/kotlin</testSourceDirectory>
 		<plugins>
@@ -104,6 +105,32 @@
 						<version>${kotlin.version}</version>
 					</dependency>
 				</dependencies>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-enforcer-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>enforce-versions</id>
+						<goals>
+							<goal>enforce</goal>
+						</goals>
+						<configuration>
+							<rules>
+								<requireMavenVersion>
+									<version>3.6</version>
+								</requireMavenVersion>
+								<requireJavaVersion>
+									<version>11</version>
+								</requireJavaVersion>
+							</rules>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>versions-maven-plugin</artifactId>
 			</plugin>
 		</plugins>
 	</build>
