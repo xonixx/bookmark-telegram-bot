@@ -2,6 +2,7 @@ package com.cmlteam.bookmark_telegram_bot
 
 import com.cmlteam.telegram_bot_common.ErrorReporter
 import com.cmlteam.telegram_bot_common.JsonHelper
+import com.cmlteam.telegram_bot_common.LogHelper
 import com.cmlteam.telegram_bot_common.TelegramBotWrapper
 import com.pengrad.telegrambot.TelegramBot
 import com.pengrad.telegrambot.request.GetMe
@@ -32,6 +33,22 @@ class Beans {
         return TelegramBotWrapper(telegramBot, jsonHelper, errorReporter)
     }
 
+    @Bean
+    fun botPollingJob(
+        botProperties: BotProperties,
+        telegramBotWrapper: TelegramBotWrapper,
+        jsonHelper: JsonHelper,
+        logHelper: LogHelper,
+    ): BotPollingJob {
+        return BotPollingJob(
+            telegramBotWrapper,
+            jsonHelper,
+            logHelper,
+            botProperties,
+            botProperties.maxFileSize ?: 0,
+        )
+    }
+
 /*    @Bean
     fun videosBackupper(
         botProperties: BotProperties,
@@ -55,30 +72,6 @@ class Beans {
         videosService: VideosService?
     ): VideosReviver {
         return VideosReviver(botProperties.backupFolder, telegramBotWrapper, videosService)
-    }
-
-    @Bean
-    fun botPollingJob(
-        botProperties: BotProperties,
-        telegramBotWrapper: TelegramBotWrapper?,
-        videosService: VideosService?,
-        videosBackupper: VideosBackupper?,
-        videosReviver: VideosReviver?,
-        jsonHelper: JsonHelper?,
-        logHelper: LogHelper?,
-        youtubeDownloader: YoutubeDownloader?
-    ): BotPollingJob {
-        return BotPollingJob(
-            telegramBotWrapper,
-            videosService,
-            videosBackupper,
-            videosReviver,
-            jsonHelper,
-            logHelper,
-            botProperties,
-            botProperties.maxFileSize,
-            youtubeDownloader
-        )
     }
 
     @Bean
