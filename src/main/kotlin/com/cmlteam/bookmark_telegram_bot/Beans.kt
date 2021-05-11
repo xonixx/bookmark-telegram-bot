@@ -21,14 +21,14 @@ class Beans {
 
     @Bean
     fun errorReporter(
-        telegramBot: TelegramBot?, jsonHelper: JsonHelper?, botProperties: BotProperties
+        telegramBot: TelegramBot, jsonHelper: JsonHelper, botProperties: BotProperties
     ): ErrorReporter {
         return ErrorReporter(telegramBot, jsonHelper, listOf(botProperties.adminUser))
     }
 
     @Bean
     fun telegramBotWrapper(
-        telegramBot: TelegramBot?, jsonHelper: JsonHelper?, errorReporter: ErrorReporter?
+        telegramBot: TelegramBot, jsonHelper: JsonHelper, errorReporter: ErrorReporter
     ): TelegramBotWrapper {
         return TelegramBotWrapper(telegramBot, jsonHelper, errorReporter)
     }
