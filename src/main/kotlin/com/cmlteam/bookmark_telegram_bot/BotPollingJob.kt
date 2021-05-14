@@ -17,6 +17,7 @@ import org.springframework.scheduling.annotation.Scheduled
 
 class BotPollingJob(
     private val telegramBot: TelegramBotWrapper,
+    private val bookmarkService: BookmarkService,
     private val jsonHelper: JsonHelper,
     private val logHelper: LogHelper,
     private val adminUserChecker: AdminUserChecker,
@@ -74,40 +75,8 @@ class BotPollingJob(
                     forwardMessageToAdmin(messageId, chatId)
                 }
             }
-            val inlineQuery = update.inlineQuery()
-            inlineQuery?.let { handleInlineQuery(update, it) }
             getUpdates.offset(update.updateId() + 1)
         }
-    }
-
-    private fun handleInlineQuery(update: Update, inlineQuery: InlineQuery) {
-
-        var query = inlineQuery.query()
-        val offset = inlineQuery.offset()
-/*        var isSize = false
-        if ("!size" == query || query.startsWith("!size ")) {
-            isSize = true
-            query = query.replaceFirst("^!size".toRegex(), "").trim { it <= ' ' }
-        }
-        val videosPage: VideosPage = videosService.searchVideo(inlineQuery.from().id(), query, offset)
-
-        //        log.info("offset: {}, nextOffset: {}", offset, videosPage.getNextOffset());
-        val results: MutableList<InlineQueryResultCachedVideo> = ArrayList<Any?>(videosPage.getPersistedVideos().size())
-        for (v in videosPage.getPersistedVideos()) {
-            results.add(
-                InlineQueryResultCachedVideo(
-                    v.getFileUniqueId(),
-                    v.getFileId(), (if (isSize) "[" + Util.renderFileSize(v.getSize()) + "] " else "")
-                            + v.getKeywords().get(0)
-                )
-            )
-        }
-        telegramBot.execute(
-            update,
-            AnswerInlineQuery(inlineQuery.id(), *results.toTypedArray())
-                .nextOffset(videosPage.getNextOffset())
-        )
-*/
     }
 
     private fun forwardMessageToAdmin(messageId: Int, chatId: Long) {

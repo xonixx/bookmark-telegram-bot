@@ -36,12 +36,14 @@ class Beans {
     @Bean
     fun botPollingJob(
         botProperties: BotProperties,
+        bookmarkService: BookmarkService,
         telegramBotWrapper: TelegramBotWrapper,
         jsonHelper: JsonHelper,
         logHelper: LogHelper,
     ): BotPollingJob {
         return BotPollingJob(
             telegramBotWrapper,
+            bookmarkService,
             jsonHelper,
             logHelper,
             botProperties,
