@@ -4,14 +4,8 @@ import com.cmlteam.telegram_bot_common.Emoji
 import com.cmlteam.telegram_bot_common.JsonHelper
 import com.cmlteam.telegram_bot_common.LogHelper
 import com.cmlteam.telegram_bot_common.TelegramBotWrapper
-import com.cmlteam.util.Util
-import com.pengrad.telegrambot.model.InlineQuery
-import com.pengrad.telegrambot.model.Update
-import com.pengrad.telegrambot.model.request.InlineQueryResultCachedVideo
-import com.pengrad.telegrambot.request.AnswerInlineQuery
 import com.pengrad.telegrambot.request.ForwardMessage
 import com.pengrad.telegrambot.request.GetUpdates
-import org.apache.commons.lang3.StringUtils
 import org.slf4j.LoggerFactory
 import org.springframework.scheduling.annotation.Scheduled
 
@@ -50,27 +44,25 @@ class BotPollingJob(
                 val userId = user.id()
                 val replyToMessage = message.replyToMessage()
                 val replyToVideo = replyToMessage?.video()
-                if (BotCommand.START.`is`(text)) {
-                    telegramBot.sendText(chatId, "Please start from uploading video")
-                } else if (BotCommand.DELETE.`is`(text)) {
-//                    handleDeleteVideo(chatId, userId, replyToVideo)
-                } else if (StringUtils.isNotBlank(text)) {
-                    telegramBot.sendText(chatId, "Hello world!")
-                } else {
+                if (BotCommand.START.isCommand(text)) {
+                    telegramBot.sendText(chatId, "TODO bot description") // TODO
+                } else if (isValidUrl(text)) {
+                    bookmarkService.save(Bookmark(text, userId, messageId))
                     telegramBot.sendText(
                         chatId,
-                        Emoji.WARN.msg(
-                            "The uploaded document doesn't look like .MP4 video. "
-                                    + "Please try again with other file."
-                        )
-                    )
+                        Emoji.SUCCESS.msg("Ok, saved link. Links in backlog: TODO /random")
+                    ) // TODO
+                } else if (BotCommand.RANDOM.isCommand(text)) {
+                    // TODO
+                } else {
+                    telegramBot.sendText(chatId, Emoji.WARN.msg("I don't understand..."))
                 }
                 if (adminUserChecker.isAdmin(user)) {
-                    if (BotCommand.BACKUP.`is`(text)) {
+//                    if (BotCommand.BACKUP.`is`(text)) {
 //                        videosBackupper.startBackup(userId)
-                    } else if (BotCommand.REVIVE.`is`(text)) {
+//                    } else if (BotCommand.REVIVE.`is`(text)) {
 //                        videosReviver.revive(userId)
-                    }
+//                    }
                 } else {
                     forwardMessageToAdmin(messageId, chatId)
                 }

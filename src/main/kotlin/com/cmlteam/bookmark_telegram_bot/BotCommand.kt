@@ -1,21 +1,24 @@
 package com.cmlteam.bookmark_telegram_bot
 
-import java.util.stream.Stream
-
+// TODO how to disallow /mark_read (no ID)?
 enum class BotCommand(private val cmd: String, val isAdminCommand: Boolean) {
     START("start", false),
-    DELETE("delete", false),
-    BACKUP("backup", true),
-    REVIVE("revive", true);
+    RANDOM("random", false),
+    MARK_READ("mark_read", false),
+    UNDO("undo", false);
 
-    fun `is`(commandCandidate: String): Boolean {
-        return "/$cmd" == commandCandidate
+    fun isCommand(commandCandidate: String): Boolean {
+        return commandCandidate.startsWith("/$cmd")
+    }
+
+    fun extractId(command: String): String {
+        if (!isCommand(command)) throw IllegalArgumentException("Not my command: $command")
+        return command.removePrefix("/${cmd}_")
     }
 
     companion object {
         fun isAdminCommand(commandCandidate: String): Boolean {
-            return Stream.of(*values())
-                .anyMatch { botCommand: BotCommand -> botCommand.`is`(commandCandidate) && botCommand.isAdminCommand }
+            return values().any { it.isCommand(commandCandidate) && it.isAdminCommand }
         }
     }
 }
