@@ -39,24 +39,30 @@ class BotPollingJob(
                 val chatId = message.chat().id()
                 val messageId = message.messageId()
                 val text = message.text()
-                val video = message.video()
                 val user = message.from()
                 val userId = user.id()
-                val replyToMessage = message.replyToMessage()
-                val replyToVideo = replyToMessage?.video()
-                /*if (BotCommand.START.isCommand(text)) {
-                    telegramBot.sendText(chatId, "TODO bot description") // TODO
+                val command = BotCommand.parse(text)
+                if (command != null) {
+                    when (command.type) {
+                        BotCommandType.START -> {
+                            telegramBot.sendText(chatId, "TODO bot description") // TODO
+                        }
+                        BotCommandType.RANDOM -> {
+                            telegramBot.sendText(chatId, "random TBD") // TODO
+                        }
+                        else -> {
+                            telegramBot.sendText(chatId, Emoji.WARN.msg("I don't understand..."))
+                        }
+                    }
                 } else if (isValidUrl(text)) {
                     bookmarkService.save(Bookmark(text, userId, messageId))
                     telegramBot.sendText(
                         chatId,
-                        Emoji.SUCCESS.msg("Ok, saved link. Links in backlog: TODO /random")
-                    ) // TODO
-                } else if (BotCommand.RANDOM.isCommand(text)) {
-                    // TODO
+                        Emoji.SUCCESS.msg("Ok, saved link. Links in backlog: ${bookmarkService.getTotal(userId)} /random")
+                    )
                 } else {
                     telegramBot.sendText(chatId, Emoji.WARN.msg("I don't understand..."))
-                }*/
+                }
                 if (adminUserChecker.isAdmin(user)) {
 //                    if (BotCommand.BACKUP.`is`(text)) {
 //                        videosBackupper.startBackup(userId)

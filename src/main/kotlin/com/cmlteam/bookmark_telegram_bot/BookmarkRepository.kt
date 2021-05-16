@@ -5,5 +5,5 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface BookmarkRepository : MongoRepository<Bookmark, String> {
-
+    fun countByUserId(userId: Int): Long
 }

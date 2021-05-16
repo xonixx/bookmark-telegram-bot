@@ -8,4 +8,8 @@ class BookmarkService(private val bookmarkRepository: BookmarkRepository) {
         bookmarkRepository.save(bookmark)
     }
 
+    fun getTotal(userId: Int): Long {
+        return bookmarkRepository.countByUserId(userId)
+    }
+
 }
