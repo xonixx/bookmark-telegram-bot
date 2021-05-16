@@ -6,7 +6,7 @@ import org.springframework.data.annotation.LastModifiedDate
 import org.springframework.data.mongodb.core.mapping.Document
 import java.time.Instant
 
-@Document(value = "bookmark")
+@Document(value = Bookmark.COLLECTION)
 class Bookmark {
     @Id
     var id: String? = null
@@ -45,5 +45,9 @@ class Bookmark {
         this.url = url
         this.createDate = createDate
         this.lastModifiedDate = lastModifiedDate
+    }
+
+    companion object {
+        const val COLLECTION = "bookmark"
     }
 }

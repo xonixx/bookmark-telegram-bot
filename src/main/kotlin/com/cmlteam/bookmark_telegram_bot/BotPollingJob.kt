@@ -48,7 +48,15 @@ class BotPollingJob(
                             telegramBot.sendText(chatId, "TODO bot description") // TODO
                         }
                         BotCommandType.RANDOM -> {
-                            telegramBot.sendText(chatId, "random TBD") // TODO
+                            val randomBookmark = bookmarkService.getRandom(userId)
+                            if (randomBookmark == null) {
+                                telegramBot.sendText(chatId, Emoji.WARN.msg("You don't have any bookmarks yet"))
+                            } else {
+                                telegramBot.sendText(
+                                    chatId,
+                                    "${randomBookmark.url}\n\n/random /mark_read_${randomBookmark.id}"
+                                )
+                            }
                         }
                         else -> {
                             telegramBot.sendText(chatId, Emoji.WARN.msg("I don't understand..."))
