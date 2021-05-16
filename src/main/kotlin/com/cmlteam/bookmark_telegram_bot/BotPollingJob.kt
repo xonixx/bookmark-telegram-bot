@@ -44,7 +44,7 @@ class BotPollingJob(
                 val userId = user.id()
                 val replyToMessage = message.replyToMessage()
                 val replyToVideo = replyToMessage?.video()
-                if (BotCommand.START.isCommand(text)) {
+                /*if (BotCommand.START.isCommand(text)) {
                     telegramBot.sendText(chatId, "TODO bot description") // TODO
                 } else if (isValidUrl(text)) {
                     bookmarkService.save(Bookmark(text, userId, messageId))
@@ -56,7 +56,7 @@ class BotPollingJob(
                     // TODO
                 } else {
                     telegramBot.sendText(chatId, Emoji.WARN.msg("I don't understand..."))
-                }
+                }*/
                 if (adminUserChecker.isAdmin(user)) {
 //                    if (BotCommand.BACKUP.`is`(text)) {
 //                        videosBackupper.startBackup(userId)
