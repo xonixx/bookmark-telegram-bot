@@ -50,38 +50,4 @@ class Beans {
             botProperties.maxFileSize ?: 0,
         )
     }
-
-/*    @Bean
-    fun videosBackupper(
-        botProperties: BotProperties,
-        telegramBotWrapper: TelegramBotWrapper?,
-        videosService: VideosService?,
-        persistedVideoRepository: PersistedVideoRepository?
-    ): VideosBackupper {
-        return VideosBackupper(
-            botProperties.backupFolder,
-            botProperties.token,
-            telegramBotWrapper,
-            videosService,
-            persistedVideoRepository
-        )
-    }
-
-    @Bean
-    fun videosReviver(
-        botProperties: BotProperties,
-        telegramBotWrapper: TelegramBotWrapper?,
-        videosService: VideosService?
-    ): VideosReviver {
-        return VideosReviver(botProperties.backupFolder, telegramBotWrapper, videosService)
-    }
-
-    @Bean
-    fun videosService(
-        botProperties: BotProperties?,
-        persistedVideoRepository: PersistedVideoRepository?,
-        searchStringMatcher: SearchStringMatcher?
-    ): VideosService {
-        return VideosService(botProperties, persistedVideoRepository, searchStringMatcher)
-    }*/
 }

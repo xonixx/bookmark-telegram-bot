@@ -45,7 +45,10 @@ class BotPollingJob(
                 if (command != null) {
                     when (command.type) {
                         BotCommandType.START -> {
-                            telegramBot.sendText(chatId, "TODO bot description") // TODO
+                            telegramBot.sendText(
+                                chatId,
+                                "This is Bookmarks bot, see https://github.com/xonixx/bookmark-telegram-bot/blob/main/README.md"
+                            )
                         }
                         BotCommandType.RANDOM -> {
                             val randomBookmark = bookmarkService.getRandom(userId)
@@ -95,11 +98,7 @@ class BotPollingJob(
                     telegramBot.sendText(chatId, Emoji.WARN.msg("I don't understand..."))
                 }
                 if (adminUserChecker.isAdmin(user)) {
-//                    if (BotCommand.BACKUP.`is`(text)) {
-//                        videosBackupper.startBackup(userId)
-//                    } else if (BotCommand.REVIVE.`is`(text)) {
-//                        videosReviver.revive(userId)
-//                    }
+                    // XXX admin commands
                 } else {
                     forwardMessageToAdmin(messageId, chatId)
                 }
