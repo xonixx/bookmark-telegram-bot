@@ -1,5 +1,8 @@
 # bookmark-telegram-bot
-[WiP] Telegram bot to bookmark URLs for future reading
+
+Telegram bot to bookmark URLs for future reading
+
+[t.me/LinkDumpBot](http://t.me/LinkDumpBot)
 
 ## Abstract
 
