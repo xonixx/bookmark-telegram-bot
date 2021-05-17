@@ -17,15 +17,34 @@ class BookmarkService(private val bookmarkRepository: BookmarkRepository, privat
     }
 
     fun getTotal(userId: Int): Long {
-        return bookmarkRepository.countByUserId(userId)
+        return bookmarkRepository.countByUserIdAndReadNot(userId, true)
     }
 
     fun getRandom(userId: Int): Bookmark? {
-        val matchStage: MatchOperation = Aggregation.match(Criteria.where("userId").isEqualTo(userId))
+        val matchStage: MatchOperation =
+            Aggregation.match(
+                Criteria.where("userId").isEqualTo(userId)
+                    .and("read").ne(true)
+            )
         val sampleStage: SampleOperation = Aggregation.sample(1)
         val aggregation: Aggregation = Aggregation.newAggregation(matchStage, sampleStage)
         val records: AggregationResults<Bookmark> =
             mongoTemplate.aggregate(aggregation, Bookmark.COLLECTION, Bookmark::class.java)
         return records.firstOrNull()
+    }
+
+    /**
+     * @return success?
+     */
+    fun markRead(id: String, userId: Int, read: Boolean): Bookmark? {
+        // we additionally filter by userId to prevent attempts at changing non-own data
+        val bookmarkOpt = bookmarkRepository.findByIdAndUserId(id, userId)
+        if (bookmarkOpt.isPresent) {
+            val bookmark = bookmarkOpt.get()
+            bookmark.read = read
+            save(bookmark)
+            return bookmark
+        }
+        return null
     }
 }

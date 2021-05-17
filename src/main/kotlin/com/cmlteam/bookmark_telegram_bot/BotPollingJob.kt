@@ -58,8 +58,31 @@ class BotPollingJob(
                                 )
                             }
                         }
-                        else -> {
-                            telegramBot.sendText(chatId, Emoji.WARN.msg("I don't understand..."))
+                        BotCommandType.MARK_READ -> {
+                            val bookmark = bookmarkService.markRead(command.id!!, userId, true)
+                            if (bookmark == null) {
+                                telegramBot.sendText(chatId, Emoji.ERROR.msg("Unknown ID!"))
+                            } else {
+                                telegramBot.sendText(
+                                    chatId, Emoji.SUCCESS.msg(
+                                        "${bookmark.url} marked read.\n/undo_${bookmark.id}\n" +
+                                                "Links in backlog: ${bookmarkService.getTotal(userId)} /random"
+                                    )
+                                )
+                            }
+                        }
+                        BotCommandType.UNDO -> {
+                            val bookmark = bookmarkService.markRead(command.id!!, userId, false)
+                            if (bookmark == null) {
+                                telegramBot.sendText(chatId, Emoji.ERROR.msg("Unknown ID!"))
+                            } else {
+                                telegramBot.sendText(
+                                    chatId, Emoji.SUCCESS.msg(
+                                        "${bookmark.url} marked unread.\n/mark_read_${bookmark.id}\n" +
+                                                "Links in backlog: ${bookmarkService.getTotal(userId)} /random"
+                                    )
+                                )
+                            }
                         }
                     }
                 } else if (isValidUrl(text)) {
