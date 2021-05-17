@@ -17,3 +17,7 @@ fun isValidUrl(candidate: String?): Boolean {
     val candidateLc = candidate.toLowerCase()
     return (candidateLc.startsWith("https:") || candidateLc.startsWith("http:")) && !candidateLc.contains(space)
 }
+
+fun extractLinks(text: String): List<String> {
+    return text.lines().map { it.trim() }.filter { isValidUrl(it) }
+}

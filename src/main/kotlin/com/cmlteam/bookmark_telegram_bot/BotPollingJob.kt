@@ -95,7 +95,24 @@ class BotPollingJob(
                         Emoji.SUCCESS.msg("Ok, saved link. Links in backlog: ${bookmarkService.getTotal(userId)} /random")
                     )
                 } else {
-                    telegramBot.sendText(chatId, Emoji.WARN.msg("I don't understand..."))
+                    val links = extractLinks(text)
+                    if (links.isEmpty()) {
+                        telegramBot.sendText(chatId, Emoji.WARN.msg("I don't understand..."))
+                    } else {
+                        links.forEach {
+                            bookmarkService.save(Bookmark(it, userId, messageId))
+                        }
+                        telegramBot.sendText(
+                            chatId,
+                            Emoji.SUCCESS.msg(
+                                "Ok, saved ${links.size} links. Links in backlog: ${
+                                    bookmarkService.getTotal(
+                                        userId
+                                    )
+                                } /random"
+                            )
+                        )
+                    }
                 }
                 if (adminUserChecker.isAdmin(user)) {
                     // XXX admin commands
@@ -106,6 +123,7 @@ class BotPollingJob(
             getUpdates.offset(update.updateId() + 1)
         }
     }
+
 
     private fun forwardMessageToAdmin(messageId: Int, chatId: Long) {
         telegramBot.execute(ForwardMessage(adminUserChecker.adminUser, chatId, messageId))

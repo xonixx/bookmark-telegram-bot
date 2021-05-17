@@ -1,7 +1,6 @@
 package com.cmlteam.bookmark_telegram_bot
 
-import org.junit.jupiter.api.Assertions.assertFalse
-import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 
 class UtilsTests {
@@ -20,6 +19,18 @@ class UtilsTests {
 		assertFalse(isValidUrl("some random text"))
 		assertFalse(isValidUrl(" https://google.com/"))
 		assertFalse(isValidUrl("https://google.com/ "))
+	}
+
+	@Test
+	fun testExtractLinks() {
+		assertEquals(3, extractLinks("""
+			aaaa
+			http://google.com
+			bbb
+			ccccc
+			https://example.com/123
+			HTTPS://DOMAIN.NET
+		""".trimIndent()).size)
 	}
 
 }
