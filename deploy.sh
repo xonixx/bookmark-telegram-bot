@@ -2,8 +2,8 @@
 
 set -e
 
-APP=video_reply_telegram_bot2
-APP_USER=video_reply_telegram_bot2
+APP=bookmark_telegram_bot
+APP_USER=bookmark_telegram_bot
 DEPLOY_USER=admin
 SERV=cmlteam3.cmlteam.com
 
