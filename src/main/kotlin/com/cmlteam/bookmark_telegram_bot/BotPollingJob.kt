@@ -94,7 +94,7 @@ class BotPollingJob(
                         chatId,
                         Emoji.SUCCESS.msg("Ok, saved link. Links in backlog: ${bookmarkService.getTotal(userId)} /random")
                     )
-                } else {
+                } else if (text != null) {
                     val links = extractLinks(text)
                     if (links.isEmpty()) {
                         telegramBot.sendText(chatId, Emoji.WARN.msg("I don't understand..."))
@@ -113,6 +113,8 @@ class BotPollingJob(
                             )
                         )
                     }
+                } else {
+                    telegramBot.sendText(chatId, Emoji.WARN.msg("I don't understand..."))
                 }
                 if (adminUserChecker.isAdmin(user)) {
                     // XXX admin commands
