@@ -12,8 +12,28 @@ import org.springframework.stereotype.Service
 
 @Service
 class BookmarkService(private val bookmarkRepository: BookmarkRepository, private val mongoTemplate: MongoTemplate) {
-    fun save(bookmark: Bookmark) {
-        bookmarkRepository.save(bookmark)
+    /**
+     * Only store unread
+     * @return was stored?
+     */
+    fun storeBookmark(bookmark: Bookmark): Boolean {
+        if (!bookmarkRepository.existsByUrlAndUserId(bookmark.url, bookmark.userId)) {
+            bookmarkRepository.save(bookmark)
+            return true
+        }
+        return false
+    }
+
+    /**
+     * @return the number of really stored (the ones not yet existing)
+     */
+    fun storeBookmarks(bookmarks: Collection<Bookmark>): Int {
+        var res = 0
+        for (bookmark in bookmarks) {
+            if (storeBookmark(bookmark))
+                res++
+        }
+        return res
     }
 
     fun getTotal(userId: Int): Long {
@@ -42,7 +62,7 @@ class BookmarkService(private val bookmarkRepository: BookmarkRepository, privat
         if (bookmarkOpt.isPresent) {
             val bookmark = bookmarkOpt.get()
             bookmark.read = read
-            save(bookmark)
+            bookmarkRepository.save(bookmark)
             return bookmark
         }
         return null

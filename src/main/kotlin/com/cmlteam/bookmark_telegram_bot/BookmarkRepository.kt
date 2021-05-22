@@ -8,4 +8,5 @@ import java.util.*
 interface BookmarkRepository : MongoRepository<Bookmark, String> {
     fun countByUserIdAndReadNot(userId: Int, read: Boolean): Long
     fun findByIdAndUserId(id: String, userId: Int): Optional<Bookmark>
+    fun existsByUrlAndUserId(url: String, userId: Int): Boolean
 }
