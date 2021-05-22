@@ -11,43 +11,47 @@ import org.springframework.context.annotation.Configuration
 
 @Configuration
 class Beans {
-    @Bean
-    fun getTelegramBot(botProperties: BotProperties): TelegramBot {
-        val telegramBot = TelegramBot(botProperties.token)
-        val response = telegramBot.execute(GetMe())
-        requireNotNull(response.user()) { "bot token is incorrect" }
-        return telegramBot
-    }
+  @Bean
+  fun getTelegramBot(botProperties: BotProperties): TelegramBot {
+    val telegramBot = TelegramBot(botProperties.token)
+    val response = telegramBot.execute(GetMe())
+    requireNotNull(response.user()) { "bot token is incorrect" }
+    return telegramBot
+  }
 
-    @Bean
-    fun errorReporter(
-        telegramBot: TelegramBot, jsonHelper: JsonHelper, botProperties: BotProperties
-    ): ErrorReporter {
-        return ErrorReporter(telegramBot, jsonHelper, listOf(botProperties.adminUser))
-    }
+  @Bean
+  fun errorReporter(
+      telegramBot: TelegramBot,
+      jsonHelper: JsonHelper,
+      botProperties: BotProperties
+  ): ErrorReporter {
+    return ErrorReporter(telegramBot, jsonHelper, listOf(botProperties.adminUser))
+  }
 
-    @Bean
-    fun telegramBotWrapper(
-        telegramBot: TelegramBot, jsonHelper: JsonHelper, errorReporter: ErrorReporter
-    ): TelegramBotWrapper {
-        return TelegramBotWrapper(telegramBot, jsonHelper, errorReporter)
-    }
+  @Bean
+  fun telegramBotWrapper(
+      telegramBot: TelegramBot,
+      jsonHelper: JsonHelper,
+      errorReporter: ErrorReporter
+  ): TelegramBotWrapper {
+    return TelegramBotWrapper(telegramBot, jsonHelper, errorReporter)
+  }
 
-    @Bean
-    fun botPollingJob(
-        botProperties: BotProperties,
-        bookmarkService: BookmarkService,
-        telegramBotWrapper: TelegramBotWrapper,
-        jsonHelper: JsonHelper,
-        logHelper: LogHelper,
-    ): BotPollingJob {
-        return BotPollingJob(
-            telegramBotWrapper,
-            bookmarkService,
-            jsonHelper,
-            logHelper,
-            botProperties,
-            botProperties.maxFileSize ?: 0,
-        )
-    }
+  @Bean
+  fun botPollingJob(
+      botProperties: BotProperties,
+      bookmarkService: BookmarkService,
+      telegramBotWrapper: TelegramBotWrapper,
+      jsonHelper: JsonHelper,
+      logHelper: LogHelper,
+  ): BotPollingJob {
+    return BotPollingJob(
+        telegramBotWrapper,
+        bookmarkService,
+        jsonHelper,
+        logHelper,
+        botProperties,
+        botProperties.maxFileSize ?: 0,
+    )
+  }
 }

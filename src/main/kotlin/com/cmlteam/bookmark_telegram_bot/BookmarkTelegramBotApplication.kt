@@ -9,5 +9,5 @@ import org.springframework.context.annotation.ComponentScan
 class BookmarkTelegramBotApplication
 
 fun main(args: Array<String>) {
-	runApplication<BookmarkTelegramBotApplication>(*args)
+  runApplication<BookmarkTelegramBotApplication>(*args)
 }

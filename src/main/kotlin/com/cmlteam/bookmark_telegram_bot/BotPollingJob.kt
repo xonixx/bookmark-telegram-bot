@@ -28,10 +28,7 @@ class BotPollingJob(
     val updates = updatesResponse.updates()
     for (update in updates) {
       logHelper.captureLogParams(update)
-      log.info("""
-    Received:
-    ${jsonHelper.toPrettyString(update)}
-    """.trimIndent())
+      log.info("Received:\n${jsonHelper.toPrettyString(update)}")
       val message = update.message()
       if (message != null) {
         val chatId = message.chat().id()
