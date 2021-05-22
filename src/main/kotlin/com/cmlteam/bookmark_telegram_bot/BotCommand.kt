@@ -2,11 +2,11 @@ package com.cmlteam.bookmark_telegram_bot
 
 class BotCommand(val type: BotCommandType, val id: String?) {
   companion object {
-    fun parse(cmd: String?): BotCommand? {
-      if (cmd == null) return null
+    fun parse(commandCandidate: String?): BotCommand? {
+      if (commandCandidate == null) return null
       for (type in BotCommandType.values()) {
-        if (type.isCommand(cmd)) {
-          return BotCommand(type, type.extractId(cmd))
+        if (type.isCommand(commandCandidate)) {
+          return BotCommand(type, type.extractId(commandCandidate))
         }
       }
       return null
@@ -16,7 +16,7 @@ class BotCommand(val type: BotCommandType, val id: String?) {
 
 enum class BotCommandType(
     private val cmd: String,
-    val hasId: Boolean,
+    private val hasId: Boolean,
     val isAdminCommand: Boolean
 ) {
   START("start", false, false),
