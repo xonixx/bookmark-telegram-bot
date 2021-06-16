@@ -79,11 +79,13 @@ class BotPollingJob(
             }
           }
         } else if (isValidUrl(text)) {
-          val saved = bookmarkService.storeBookmark(Bookmark(text, userId, messageId))
+          val existing = bookmarkService.storeBookmark(Bookmark(text, userId, messageId))
           telegramBot.sendText(
               chatId,
-              (if (saved) Emoji.SUCCESS.msg("Ok, saved link.")
-              else Emoji.WARN.msg("Already in backlog.")) +
+              (if (existing == null) Emoji.SUCCESS.msg("Ok, saved link.")
+              else
+                  Emoji.WARN.msg(
+                      "Already in backlog ${if (existing.read) "/undo_" else "/mark_read_"}${existing.id}.")) +
                   " Links in backlog: ${bookmarkService.getTotal(userId)} /random")
         } else if (text != null) {
           val links = extractLinks(text)

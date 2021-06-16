@@ -15,22 +15,23 @@ class BookmarkService(
     private val mongoTemplate: MongoTemplate
 ) {
   /**
-   * Only store unread
-   * @return was stored?
+   * Only store non-existed in DB
+   * @return previously existed bookmark record for the URL or null
    */
-  fun storeBookmark(bookmark: Bookmark): Boolean {
-    if (!bookmarkRepository.existsByUrlAndUserId(bookmark.url, bookmark.userId)) {
+  fun storeBookmark(bookmark: Bookmark): Bookmark? {
+    val existing = bookmarkRepository.findByUrlAndUserId(bookmark.url, bookmark.userId)
+    if (null == existing) {
       bookmarkRepository.save(bookmark)
-      return true
+      return null
     }
-    return false
+    return existing
   }
 
   /** @return the number of really stored (the ones not yet existing) */
   fun storeBookmarks(bookmarks: Collection<Bookmark>): Int {
     var res = 0
     for (bookmark in bookmarks) {
-      if (storeBookmark(bookmark)) res++
+      if (storeBookmark(bookmark) == null) res++
     }
     return res
   }
@@ -52,12 +53,10 @@ class BookmarkService(
   /** @return success? */
   fun markRead(id: String, userId: Int, read: Boolean): Bookmark? {
     // we additionally filter by userId to prevent attempts at changing non-own data
-    val bookmarkOpt = bookmarkRepository.findByIdAndUserId(id, userId)
-    if (bookmarkOpt.isPresent) {
-      val bookmark = bookmarkOpt.get()
+    val bookmark = bookmarkRepository.findByIdAndUserId(id, userId)
+    if (bookmark != null) {
       bookmark.read = read
-      bookmarkRepository.save(bookmark)
-      return bookmark
+      return bookmarkRepository.save(bookmark)
     }
     return null
   }
