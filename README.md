@@ -19,7 +19,13 @@ Optionally can have a means to tag links and then select by tag but need to find
 ----------|------------------
 **User**  |https://some.link/
 **Bot**   | Ok, saved link. Links in backlog: 17 `/random`
-          
+
+or (link already in DB)
+
+|         |                 |
+----------|------------------
+**Bot**   | ⚠️ Already in backlog `/mark_read_123`. Links in backlog: 16 `/random`
+
 ### Get random link
 |         |                 |
 ----------|------------------
