@@ -38,20 +38,26 @@ class Beans {
   }
 
   @Bean
-  fun botPollingJob(
+  fun botUpdateHandler(
       botProperties: BotProperties,
       bookmarkService: BookmarkService,
+      telegramBotWrapper: TelegramBotWrapper,
+  ): BotUpdateHandler {
+    return BotUpdateHandler(
+        telegramBotWrapper,
+        bookmarkService,
+        botProperties,
+        botProperties.maxFileSize ?: 0,
+    )
+  }
+
+  @Bean
+  fun botPollingJob(
+      botUpdateHandler: BotUpdateHandler,
       telegramBotWrapper: TelegramBotWrapper,
       jsonHelper: JsonHelper,
       logHelper: LogHelper,
   ): BotPollingJob {
-    return BotPollingJob(
-        telegramBotWrapper,
-        bookmarkService,
-        jsonHelper,
-        logHelper,
-        botProperties,
-        botProperties.maxFileSize ?: 0,
-    )
+    return BotPollingJob(telegramBotWrapper, botUpdateHandler, jsonHelper, logHelper)
   }
 }
