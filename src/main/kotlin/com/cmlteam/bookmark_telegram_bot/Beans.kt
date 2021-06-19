@@ -42,8 +42,8 @@ class Beans {
       botProperties: BotProperties,
       bookmarkService: BookmarkService,
       telegramBotWrapper: TelegramBotWrapper,
-  ): BotUpdateHandler {
-    return BotUpdateHandler(
+  ): BotUpdateHandlerImpl {
+    return BotUpdateHandlerImpl(
         telegramBotWrapper,
         bookmarkService,
         botProperties,
@@ -53,7 +53,7 @@ class Beans {
 
   @Bean
   fun botPollingJob(
-      botUpdateHandler: BotUpdateHandler,
+      botUpdateHandler: BotUpdateHandlerImpl,
       telegramBotWrapper: TelegramBotWrapper,
       jsonHelper: JsonHelper,
       logHelper: LogHelper,

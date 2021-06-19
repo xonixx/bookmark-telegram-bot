@@ -9,7 +9,7 @@ import org.springframework.scheduling.annotation.Scheduled
 
 class BotPollingJob(
     private val telegramBot: TelegramBotWrapper,
-    private val botUpdateHandler: BotUpdateHandler,
+    private val botUpdateHandler: BotUpdateHandlerImpl,
     private val jsonHelper: JsonHelper,
     private val logHelper: LogHelper,
 ) {

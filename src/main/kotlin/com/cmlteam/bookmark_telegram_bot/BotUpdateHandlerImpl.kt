@@ -1,18 +1,18 @@
 package com.cmlteam.bookmark_telegram_bot
 
+import com.cmlteam.telegram_bot_common.BotUpdateHandler
 import com.cmlteam.telegram_bot_common.Emoji
-import com.cmlteam.telegram_bot_common.TelegramBotWrapper
+import com.cmlteam.telegram_bot_common.TelegramSender
 import com.pengrad.telegrambot.model.Update
 import com.pengrad.telegrambot.request.ForwardMessage
 import org.slf4j.LoggerFactory
 
-class BotUpdateHandler(
-    private val telegramBot: TelegramBotWrapper,
+class BotUpdateHandlerImpl(
     private val bookmarkService: BookmarkService,
     private val adminUserChecker: AdminUserChecker,
     private val maxFileSize: Int
-) {
-  fun processUpdate(update: Update) {
+) : BotUpdateHandler {
+  override fun processUpdate(telegramSender: TelegramSender, update: Update) {
     val message = update.message()
     if (message != null) {
       val chatId = message.chat().id()
@@ -24,7 +24,7 @@ class BotUpdateHandler(
       if (command != null) {
         when (command.type) {
           BotCommandType.START -> {
-            telegramBot.sendText(
+            telegramSender.sendText(
                 chatId,
                 "This is Bookmarks bot, see https://github.com/xonixx/bookmark-telegram-bot/blob/main/README.md")
           }
@@ -99,6 +99,6 @@ class BotUpdateHandler(
   }
 
   companion object {
-    private val log = LoggerFactory.getLogger(BotUpdateHandler::class.java)
+    private val log = LoggerFactory.getLogger(BotUpdateHandlerImpl::class.java)
   }
 }
