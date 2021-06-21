@@ -1,6 +1,5 @@
 package com.cmlteam.bookmark_telegram_bot
 
-import com.pengrad.telegrambot.model.User
 import javax.validation.constraints.NotBlank
 import javax.validation.constraints.NotNull
 import javax.validation.constraints.Positive
@@ -16,13 +15,4 @@ data class BotProperties(
     @field:NotBlank val token: String? = null,
     @field:NotBlank val backupFolder: String? = null,
     @field:NotNull val maxFileSize: Int? = null
-) : AdminUserChecker {
-
-  override fun isAdmin(userId: Long): Boolean {
-    return adminUser == userId
-  }
-
-  override fun isAdmin(user: User): Boolean {
-    return isAdmin(user.id().toLong())
-  }
-}
+) : AdminUserChecker

@@ -18,9 +18,9 @@ elk:
   port: 10443
   application: bookmark_telegram_bot
 
-telegram-bot:
-  admin-user: 0 # EXTERNAL
-  token: # EXTERNAL
-  backup-folder: # EXTERNAL
-  max-file-size: 10_000_000 # 10 MB
+#telegram-bot:
+#  admin-user: 7
+#  token: "test token"
+#  backup-folder: "/tmp/backup123"
+#  max-file-size: 10_000_000 # 10 MB
   
