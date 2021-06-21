@@ -41,10 +41,8 @@ class Beans {
   fun botUpdateHandler(
       botProperties: BotProperties,
       bookmarkService: BookmarkService,
-      telegramBotWrapper: TelegramBotWrapper,
   ): BotUpdateHandlerImpl {
     return BotUpdateHandlerImpl(
-        telegramBotWrapper,
         bookmarkService,
         botProperties,
         botProperties.maxFileSize ?: 0,

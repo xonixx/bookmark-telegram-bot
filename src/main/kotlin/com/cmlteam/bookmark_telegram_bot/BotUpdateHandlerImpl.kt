@@ -31,18 +31,18 @@ class BotUpdateHandlerImpl(
           BotCommandType.RANDOM -> {
             val randomBookmark = bookmarkService.getRandom(userId)
             if (randomBookmark == null) {
-              telegramBot.sendText(chatId, Emoji.WARN.msg("You don't have any bookmarks yet"))
+              telegramSender.sendText(chatId, Emoji.WARN.msg("You don't have any bookmarks yet"))
             } else {
-              telegramBot.sendText(
+              telegramSender.sendText(
                   chatId, "${randomBookmark.url}\n\n/random /mark_read_${randomBookmark.id}")
             }
           }
           BotCommandType.MARK_READ -> {
             val bookmark = bookmarkService.markRead(command.id!!, userId, true)
             if (bookmark == null) {
-              telegramBot.sendText(chatId, Emoji.ERROR.msg("Unknown ID!"))
+              telegramSender.sendText(chatId, Emoji.ERROR.msg("Unknown ID!"))
             } else {
-              telegramBot.sendText(
+              telegramSender.sendText(
                   chatId,
                   Emoji.SUCCESS.msg(
                       "${bookmark.url} marked read.\n/undo_${bookmark.id}\n" +
@@ -52,9 +52,9 @@ class BotUpdateHandlerImpl(
           BotCommandType.UNDO -> {
             val bookmark = bookmarkService.markRead(command.id!!, userId, false)
             if (bookmark == null) {
-              telegramBot.sendText(chatId, Emoji.ERROR.msg("Unknown ID!"))
+              telegramSender.sendText(chatId, Emoji.ERROR.msg("Unknown ID!"))
             } else {
-              telegramBot.sendText(
+              telegramSender.sendText(
                   chatId,
                   Emoji.SUCCESS.msg(
                       "${bookmark.url} marked unread.\n/mark_read_${bookmark.id}\n" +
@@ -64,7 +64,7 @@ class BotUpdateHandlerImpl(
         }
       } else if (isValidUrl(text)) {
         val existing = bookmarkService.storeBookmark(Bookmark(text, userId, messageId))
-        telegramBot.sendText(
+        telegramSender.sendText(
             chatId,
             (if (existing == null) Emoji.SUCCESS.msg("Ok, saved link.")
             else
@@ -74,28 +74,28 @@ class BotUpdateHandlerImpl(
       } else if (text != null) {
         val links = extractLinks(text)
         if (links.isEmpty()) {
-          telegramBot.sendText(chatId, Emoji.WARN.msg("I don't understand..."))
+          telegramSender.sendText(chatId, Emoji.WARN.msg("I don't understand..."))
         } else {
           val saved = bookmarkService.storeBookmarks(links.map { Bookmark(it, userId, messageId) })
-          telegramBot.sendText(
+          telegramSender.sendText(
               chatId,
               Emoji.SUCCESS.msg(
                   "Ok, saved $saved new of ${links.size} links. " +
                       "Links in backlog: ${bookmarkService.getTotal(userId)} /random"))
         }
       } else {
-        telegramBot.sendText(chatId, Emoji.WARN.msg("I don't understand..."))
+        telegramSender.sendText(chatId, Emoji.WARN.msg("I don't understand..."))
       }
       if (adminUserChecker.isAdmin(user)) {
         // XXX admin commands
       } else {
-        forwardMessageToAdmin(messageId, chatId)
+        forwardMessageToAdmin(telegramSender, messageId, chatId)
       }
     }
   }
 
-  private fun forwardMessageToAdmin(messageId: Int, chatId: Long) {
-    telegramBot.execute(ForwardMessage(adminUserChecker.adminUser, chatId, messageId))
+  private fun forwardMessageToAdmin(telegramSender: TelegramSender, messageId: Int, chatId: Long) {
+    telegramSender.execute(ForwardMessage(adminUserChecker.adminUser, chatId, messageId))
   }
 
   companion object {

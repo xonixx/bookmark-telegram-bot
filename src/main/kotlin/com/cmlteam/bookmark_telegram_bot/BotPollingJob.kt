@@ -26,7 +26,7 @@ class BotPollingJob(
       logHelper.captureLogParams(update)
       log.info("Received:\n${jsonHelper.toPrettyString(update)}")
 
-      botUpdateHandler.processUpdate(update)
+      botUpdateHandler.processUpdate(telegramBot, update)
       getUpdates.offset(update.updateId() + 1)
     }
   }
