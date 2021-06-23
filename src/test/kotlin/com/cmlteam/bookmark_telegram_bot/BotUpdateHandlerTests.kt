@@ -61,7 +61,7 @@ class BotUpdateHandlerTests(
     val bookmarkId = bookmarkRepository.findByUrlAndUserId(link1, user1.id())!!.id
 
     assertThat(botTester.processUserText(user1, link1).text)
-        .matches("⚠️ Already in backlog /mark_read_${bookmarkId}. Links in backlog: 1 /random")
+        .isEqualTo("⚠️ Already in backlog /mark_read_${bookmarkId}. Links in backlog: 1 /random")
   }
 
   @Test
