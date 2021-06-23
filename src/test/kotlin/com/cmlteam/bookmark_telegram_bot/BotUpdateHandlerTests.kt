@@ -81,8 +81,19 @@ class BotUpdateHandlerTests(
     val bookmarkId = bookmarkRepository.findByUrlAndUserId(link2, user1.id())!!.id
 
     assertThat(botTester.processUserText(user1, "/mark_read_${bookmarkId}").text)
-        .isEqualTo(
-            "✅ $link2 marked read.\n/undo_$bookmarkId\nLinks in backlog: 1 /random"
-        )
+        .isEqualTo("✅ $link2 marked read.\n/undo_$bookmarkId\nLinks in backlog: 1 /random")
+  }
+
+  @Test
+  fun testMarkUnread() {
+    botTester.processUserText(user1, link1)
+    botTester.processUserText(user1, link2)
+
+    val bookmarkId = bookmarkRepository.findByUrlAndUserId(link2, user1.id())!!.id
+
+    botTester.processUserText(user1, "/mark_read_${bookmarkId}")
+
+    assertThat(botTester.processUserText(user1, "/undo_${bookmarkId}").text)
+        .isEqualTo("✅ $link2 marked unread.\n/mark_read_$bookmarkId\nLinks in backlog: 2 /random")
   }
 }
