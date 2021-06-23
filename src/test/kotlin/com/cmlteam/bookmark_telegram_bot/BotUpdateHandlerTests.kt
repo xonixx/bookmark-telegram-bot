@@ -67,9 +67,22 @@ class BotUpdateHandlerTests(
   @Test
   fun testAddTwoLinksByDifferentUsers() {
     botTester.processUserText(user1, link1)
-      
+
     assertEquals(
         "✅ Ok, saved link. Links in backlog: 1 /random",
         botTester.processUserText(user2, link2).text)
+  }
+
+  @Test
+  fun testMarkRead() {
+    botTester.processUserText(user1, link1)
+    botTester.processUserText(user1, link2)
+
+    val bookmarkId = bookmarkRepository.findByUrlAndUserId(link2, user1.id())!!.id
+
+    assertThat(botTester.processUserText(user1, "/mark_read_${bookmarkId}").text)
+        .isEqualTo(
+            "✅ $link2 marked read.\n/undo_$bookmarkId\nLinks in backlog: 1 /random"
+        )
   }
 }
