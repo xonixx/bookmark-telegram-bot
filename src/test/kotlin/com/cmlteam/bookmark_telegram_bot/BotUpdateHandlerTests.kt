@@ -31,7 +31,9 @@ class BotUpdateHandlerTests(
               100))
 
   private val user1 = telegramFactory.user(1, "John", "Doe")
+  private val user2 = telegramFactory.user(2, "Jane", "Smith")
   private val link1 = "http://google.com"
+  private val link2 = "https://example.com"
 
   @BeforeEach
   fun cleanupDb() {
@@ -40,11 +42,9 @@ class BotUpdateHandlerTests(
 
   @Test
   fun testAddLink() {
-
-    val userJohnDoe = telegramFactory.user(1, "John", "Doe")
     assertEquals(
         "✅ Ok, saved link. Links in backlog: 1 /random",
-        botTester.processUserText(userJohnDoe, link1).text)
+        botTester.processUserText(user1, link1).text)
   }
 
   @Test
@@ -53,5 +53,13 @@ class BotUpdateHandlerTests(
 
     assertThat(botTester.processUserText(user1, link1).text)
         .matches("⚠️ Already in backlog /mark_read_[a-f\\d]{24}. Links in backlog: 1 /random")
+  }
+
+  @Test
+  fun testAddTwoLinks() {
+    botTester.processUserText(user1, link1)
+    assertEquals(
+        "✅ Ok, saved link. Links in backlog: 2 /random",
+        botTester.processUserText(user1, link2).text)
   }
 }
