@@ -58,8 +58,18 @@ class BotUpdateHandlerTests(
   @Test
   fun testAddTwoLinks() {
     botTester.processUserText(user1, link1)
+
     assertEquals(
         "✅ Ok, saved link. Links in backlog: 2 /random",
         botTester.processUserText(user1, link2).text)
+  }
+
+  @Test
+  fun testAddTwoLinksByDifferentUsers() {
+    botTester.processUserText(user1, link1)
+      
+    assertEquals(
+        "✅ Ok, saved link. Links in backlog: 1 /random",
+        botTester.processUserText(user2, link2).text)
   }
 }
