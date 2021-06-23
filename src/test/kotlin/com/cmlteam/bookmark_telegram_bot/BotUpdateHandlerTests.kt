@@ -51,8 +51,10 @@ class BotUpdateHandlerTests(
   fun testAddSameLink() {
     botTester.processUserText(user1, link1)
 
+    val bookmarkId = bookmarkRepository.findByUrlAndUserId(link1, user1.id())!!.id
+
     assertThat(botTester.processUserText(user1, link1).text)
-        .matches("⚠️ Already in backlog /mark_read_[a-f\\d]{24}. Links in backlog: 1 /random")
+        .matches("⚠️ Already in backlog /mark_read_${bookmarkId}. Links in backlog: 1 /random")
   }
 
   @Test
@@ -95,5 +97,42 @@ class BotUpdateHandlerTests(
 
     assertThat(botTester.processUserText(user1, "/undo_${bookmarkId}").text)
         .isEqualTo("✅ $link2 marked unread.\n/mark_read_$bookmarkId\nLinks in backlog: 2 /random")
+  }
+
+  @Test
+  fun testRandomEmpty() {
+    assertThat(botTester.processUserText(user1, "/random").text)
+        .isEqualTo("⚠️ You don't have any bookmarks yet")
+  }
+
+  @Test
+  fun testRandomOne() {
+    botTester.processUserText(user1, link1)
+
+    val bookmarkId = bookmarkRepository.findByUrlAndUserId(link1, user1.id())!!.id
+
+    assertThat(botTester.processUserText(user1, "/random").text)
+        .isEqualTo("$link1\n\n/random /mark_read_$bookmarkId")
+  }
+
+  @Test
+  fun testRandomTwo() {
+    botTester.processUserText(user1, link1)
+    botTester.processUserText(user1, link2)
+
+    val bookmarkId1 = bookmarkRepository.findByUrlAndUserId(link1, user1.id())!!.id
+    val bookmarkId2 = bookmarkRepository.findByUrlAndUserId(link2, user1.id())!!.id
+
+    val repliesSet = HashSet<String>()
+
+    for (i in 1..20) {
+      repliesSet.add(botTester.processUserText(user1, "/random").text)
+    }
+
+    assertThat(repliesSet)
+        .isEqualTo(
+            setOf(
+                "$link1\n\n/random /mark_read_$bookmarkId1",
+                "$link2\n\n/random /mark_read_$bookmarkId2"))
   }
 }
