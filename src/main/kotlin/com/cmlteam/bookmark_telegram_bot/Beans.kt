@@ -8,8 +8,10 @@ import com.pengrad.telegrambot.TelegramBot
 import com.pengrad.telegrambot.request.GetMe
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.context.annotation.Profile
 
 @Configuration
+@Profile("!test")
 class Beans {
   @Bean
   fun getTelegramBot(botProperties: BotProperties): TelegramBot {
