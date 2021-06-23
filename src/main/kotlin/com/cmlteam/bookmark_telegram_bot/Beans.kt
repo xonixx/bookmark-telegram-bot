@@ -8,8 +8,10 @@ import com.pengrad.telegrambot.TelegramBot
 import com.pengrad.telegrambot.request.GetMe
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.context.annotation.Profile
 
 @Configuration
+@Profile("!test")
 class Beans {
   @Bean
   fun getTelegramBot(botProperties: BotProperties): TelegramBot {
@@ -38,20 +40,24 @@ class Beans {
   }
 
   @Bean
-  fun botPollingJob(
+  fun botUpdateHandler(
       botProperties: BotProperties,
       bookmarkService: BookmarkService,
+  ): BotUpdateHandlerImpl {
+    return BotUpdateHandlerImpl(
+        bookmarkService,
+        botProperties,
+        botProperties.maxFileSize ?: 0,
+    )
+  }
+
+  @Bean
+  fun botPollingJob(
+      botUpdateHandler: BotUpdateHandlerImpl,
       telegramBotWrapper: TelegramBotWrapper,
       jsonHelper: JsonHelper,
       logHelper: LogHelper,
   ): BotPollingJob {
-    return BotPollingJob(
-        telegramBotWrapper,
-        bookmarkService,
-        jsonHelper,
-        logHelper,
-        botProperties,
-        botProperties.maxFileSize ?: 0,
-    )
+    return BotPollingJob(telegramBotWrapper, botUpdateHandler, jsonHelper, logHelper)
   }
 }

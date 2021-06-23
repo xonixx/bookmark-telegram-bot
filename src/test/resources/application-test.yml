@@ -1,0 +1,26 @@
+server:
+  address: 127.0.0.1
+  port: 8080
+
+spring:
+  main.web-application-type: none # don't run web context now since we use polling for bot
+
+  data:
+    mongodb:
+      database: bookmark_telegram_bot-test
+
+#logging:
+#  level:
+#    org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping: TRACE
+
+elk:
+  host: elk.cmlteam.com
+  port: 10443
+  application: bookmark_telegram_bot
+
+#telegram-bot:
+#  admin-user: 7
+#  token: "test token"
+#  backup-folder: "/tmp/backup123"
+#  max-file-size: 10_000_000 # 10 MB
+  
