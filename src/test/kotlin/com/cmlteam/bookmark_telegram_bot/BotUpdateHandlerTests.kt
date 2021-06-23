@@ -2,6 +2,7 @@ package com.cmlteam.bookmark_telegram_bot
 
 import com.cmlteam.telegram_bot_common.test.BotTester
 import com.cmlteam.telegram_bot_common.test.TelegramFactory
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -29,6 +30,9 @@ class BotUpdateHandlerTests(
               },
               100))
 
+  private val user1 = telegramFactory.user(1, "John", "Doe")
+  private val link1 = "http://google.com"
+
   @BeforeEach
   fun cleanupDb() {
     bookmarkRepository.deleteAll()
@@ -37,8 +41,17 @@ class BotUpdateHandlerTests(
   @Test
   fun testAddLink() {
 
+    val userJohnDoe = telegramFactory.user(1, "John", "Doe")
     assertEquals(
         "✅ Ok, saved link. Links in backlog: 1 /random",
-        botTester.processUserText(telegramFactory.user(1, "John", "Doe"), "http://google.com").text)
+        botTester.processUserText(userJohnDoe, link1).text)
+  }
+
+  @Test
+  fun testAddSameLink() {
+    botTester.processUserText(user1, link1)
+
+    assertThat(botTester.processUserText(user1, link1).text)
+        .matches("⚠️ Already in backlog /mark_read_[a-f\\d]{24}. Links in backlog: 1 /random")
   }
 }
