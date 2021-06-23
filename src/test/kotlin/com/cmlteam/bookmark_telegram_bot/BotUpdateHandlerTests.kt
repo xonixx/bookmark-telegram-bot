@@ -41,6 +41,13 @@ class BotUpdateHandlerTests(
   }
 
   @Test
+  fun testStart() {
+    assertEquals(
+        "This is Bookmarks bot, see https://github.com/xonixx/bookmark-telegram-bot/blob/main/README.md",
+        botTester.processUserText(user1, "/start").text)
+  }
+
+  @Test
   fun testAddLink() {
     assertEquals(
         "✅ Ok, saved link. Links in backlog: 1 /random",
