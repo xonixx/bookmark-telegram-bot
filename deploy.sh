@@ -31,6 +31,11 @@ if [[ ! -f /etc/init.d/$APP ]]
 then
     echo 'Installing service $APP ...'
     sudo ln -s /home/$APP_USER/$APP.jar /etc/init.d/$APP
+fi
+rcs=\$(find -L /etc/rc?.d/ -samefile /etc/init.d/$APP | wc -l)
+if [[ \$rcs -eq 0 ]]
+then
+    echo 'Scheduling for auto-start $APP ...'
     sudo update-rc.d $APP defaults 99
 fi
 sudo /etc/init.d/$APP restart
