@@ -36,11 +36,11 @@ class BookmarkService(
     return res
   }
 
-  fun getTotal(userId: Int): Long {
+  fun getTotal(userId: Long): Long {
     return bookmarkRepository.countByUserIdAndReadNot(userId, true)
   }
 
-  fun getRandom(userId: Int): Bookmark? {
+  fun getRandom(userId: Long): Bookmark? {
     val matchStage: MatchOperation =
         Aggregation.match(Criteria.where("userId").isEqualTo(userId).and("read").ne(true))
     val sampleStage: SampleOperation = Aggregation.sample(1)
@@ -51,7 +51,7 @@ class BookmarkService(
   }
 
   /** @return success? */
-  fun markRead(id: String, userId: Int, read: Boolean): Bookmark? {
+  fun markRead(id: String, userId: Long, read: Boolean): Bookmark? {
     // we additionally filter by userId to prevent attempts at changing non-own data
     val bookmark = bookmarkRepository.findByIdAndUserId(id, userId)
     if (bookmark != null) {

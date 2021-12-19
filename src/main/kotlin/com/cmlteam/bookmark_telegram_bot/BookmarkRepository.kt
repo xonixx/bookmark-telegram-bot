@@ -5,7 +5,7 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface BookmarkRepository : MongoRepository<Bookmark, String> {
-  fun countByUserIdAndReadNot(userId: Int, read: Boolean): Long
-  fun findByIdAndUserId(id: String, userId: Int): Bookmark?
-  fun findByUrlAndUserId(url: String, userId: Int): Bookmark?
+  fun countByUserIdAndReadNot(userId: Long, read: Boolean): Long
+  fun findByIdAndUserId(id: String, userId: Long): Bookmark?
+  fun findByUrlAndUserId(url: String, userId: Long): Bookmark?
 }

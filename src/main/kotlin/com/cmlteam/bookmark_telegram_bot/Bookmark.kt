@@ -9,7 +9,7 @@ import org.springframework.data.mongodb.core.mapping.Document
 @Document(value = Bookmark.COLLECTION)
 class Bookmark(
     @Id var id: String? = null,
-    var userId: Int = 0,
+    var userId: Long = 0,
     var messageId: Int = 0,
     var url: String = "",
     var read: Boolean = false,
@@ -19,7 +19,7 @@ class Bookmark(
   constructor() : this("", 0, 0)
   constructor(
       url: String,
-      userId: Int,
+      userId: Long,
       messageId: Int
   ) : this(null, userId, messageId, url, false, Instant.now(), Instant.now())
 
