@@ -14,7 +14,7 @@ fun isValidUrl(candidate: String?): Boolean {
     return false
   }
 
-  val candidateLc = candidate.toLowerCase()
+  val candidateLc = candidate.lowercase()
   return (candidateLc.startsWith("https:") || candidateLc.startsWith("http:")) &&
       !candidateLc.contains(space)
 }
