@@ -7,7 +7,7 @@ APP_USER=bookmark_telegram_bot
 DEPLOY_USER=admin
 SERV=cmlteam3.cmlteam.com
 
-export JAVA_HOME=/home/xonix/.sdkman/candidates/java/current
+export JAVA_HOME=/home/xonix/.sdkman/candidates/java/21.3.0.r11-grl
 
 echo
 echo "BUILD..."
