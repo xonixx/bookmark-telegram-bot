@@ -68,7 +68,7 @@
 		<dependency>
 			<groupId>com.github.xonixx</groupId>
 			<artifactId>telegram-bot-common</artifactId>
-			<version>536fcdb</version>
+			<version>0.1.1</version>
 		</dependency>
 		<dependency>
 			<groupId>com.github.pengrad</groupId>
